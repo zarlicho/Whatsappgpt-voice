@@ -4,11 +4,11 @@ const { OpenAI} = require("openai");
 const fs = require("fs")
 require("dotenv").config()
 const openai = new OpenAI({
-    apiKey: process.env.openai // This is also the default, can be omitted
+    apiKey: process.env.openai // openai api key
 });
 const client = new Client({
      authStrategy: new LocalAuth({
-          clientId: "client-one" //Un identificador(Sugiero que no lo modifiques)
+          clientId: "client-one" 
      })
 })
 
@@ -16,7 +16,6 @@ const client = new Client({
 client.on('authenticated', (session) => {
     console.log(session);
 });
- 
 
 client.initialize();
 client.on("qr", qr => {
@@ -50,7 +49,7 @@ async function GetResponse(FileName){
 }
 
 function man(){
-    client.on('message_create', async (message) => { 
+    client.on('message', async (message) => { 
         if (message.type == "ptt"){
             console.log((await message.getContact()).name)
             const FileName = (await message.getContact()).name
@@ -60,7 +59,7 @@ function man(){
                     console.log("error: ",err)
                 }
                 else{
-                    console.log("success!")
+                    console.log("success to download voice message")
                     const response = await GetResponse(FileName)
                     await client.sendMessage(message.from, response)
                 }
